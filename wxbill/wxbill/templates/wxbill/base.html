@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>微信账单系统</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/weui.min.css' %}">
+</head>
+<body ontouchstart>
+
+{% block pagecss %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/zepto.min.js' %}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+</script>
+
+{% block jsblock %}
+{% endblock %}
+
+</body>
+</html>
