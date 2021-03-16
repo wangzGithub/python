@@ -1,0 +1,106 @@
+{% extends 'wxbill/base.html' %}
+
+{% block content %}
+
+<div class="page-hd">
+    <h1 class="page-hd-title">添加账单</h1>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">名称</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id="name" class="weui-input" placeholder="请输入账单名称">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">日期</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="bill_date" type="text" readonly>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="padding-left: 15px;">一级分类</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select id="p_pay_type" class="weui-select" style="margin-left: -15px;">
+                    {% if p_pay_type_list %}
+                        <option selected value="0">请选择一级分类</option>
+                        {% for p_pay_type in p_pay_type_list %}
+                            <option value="{{ p_pay_type.id }}">{{ p_pay_type.name }}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option selected value="-1">没有分类</option>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select" style="display: none;">
+            <div class="weui-cell__hd">
+                <label class="weui-label" style="padding-left: 15px;">二级分类</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select id="pay_type" class="weui-select" style="margin-left: -15px;">
+                    <option selected value="0">请选择二级分类</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">金额</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" id="price">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">备注</label>
+            </div>
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入不多于100字备注信息,可不填" rows="5"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="page-bd-15">
+        <a class="weui-btn weui-btn_primary">保存</a>
+        <a class="weui-btn weui-btn_warn" id="cancel">取消</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsblock %}
+<script type="text/javascript">
+<!-- 页面载入时获取当天日期 -->
+$().ready(function () {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth();
+    const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    const today = year + '-' + month  + '-' + day;
+    $('#bill_date').val(today);
+});
+
+$("#bill_date").datetimePicker({
+    title: '账单日期',
+    times:function(){return [];},
+    parse:function(str){
+        return str.split("-");
+    },
+    onChange: function (picker, values, displayValues) {
+        console.log(values);
+    }
+});
+
+// 点击取消时进行确认 确认后返回到账单列表页面
+$(document).on("click", "#cancel", function () {
+    $.confirm("是否返回到列表页?", "是否返回", function () {
+        window.location.href = "{% url 'bill:to_index' %}";
+    }, function () {});
+});
+</script>
+{% endblock %}

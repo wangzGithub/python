@@ -1,0 +1,60 @@
+{% extends 'wxbill/base.html' %}
+
+{% block content %}
+
+<div class="page-hd">
+    <h1 class="page-hd-title">支出分类列表</h1>
+    <p class="page-hd-desc">显示用户建立的所有有效支出分类</p>
+</div>
+<div class="page-bd">
+{% if pay_type_list %}
+    <ul class="collapse">
+    {% for pay_type in pay_type_list %}
+        <li>
+            <div class="weui-flex js-category">
+                <div class="weui-flex__item">分类名称：{{ pay_type.name }}</div>
+                <i class="icon icon-83"></i>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <div class="weui-flex" style="height: 50px;text-align: center; line-height: 50px;">
+        <div class="weui-flex__item">
+            <h3>没有记录</h3>
+        </div>
+    </div>
+{% endif %}
+</div>
+<div class="page-bd-15">
+    <a class="weui-btn weui-btn_default" href="{% url 'pay_type:to_add_pay_type' %}">添加支出分类</a>
+</div>
+
+<!-- 底部导航条 -->
+<div class="weui-tabbar tab-bottom">
+    <a class="weui-tabbar__item" href="{% url 'charts:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-67 f67 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">统计</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'bill:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-71 f71 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">账单</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'pay_type:to_list' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-33 f33 weui-tabbar__icon" style="color: #009788;"></i>
+        </span>
+        <p class="weui-tabbar__label">支出分类</p>
+    </a>
+</div>
+
+{% endblock %}
+
+{% block jsblock %}
+<script type="text/javascript">
+</script>
+{% endblock %}

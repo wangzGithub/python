@@ -1,0 +1,110 @@
+{% extends 'wxbill/base.html' %}
+
+{% block content %}
+
+<div class="page-hd">
+    <h1 class="page-hd-title">添加支出分类</h1>
+    <!-- 添加分类Form -->
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__hd" style="padding-left: 15px;">
+                <label class="weui-label">一级分类</label>
+            </div>
+            <div class="weui-cell__bd" style="margin-left: -15px;">
+                <select id="p_pay_type" class="weui-select">
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">分类名称</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" id="name">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__tips">不选择一级分类时为添加一级分类，选择后为添加二级分类</div>
+    <!-- 确认和返回按钮 -->
+    <div class="page-bd-15">
+        <a class="weui-btn weui-btn_primary" onclick="save()">保存</a>
+        <a class="weui-btn weui-btn_warn" id="cancel">取消</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsblock %}
+
+<script type="text/javascript">
+
+// 页面载入执行方法
+$(function () {
+    getParentPayTypeList();
+});
+
+// 获取用户关联的所有一级分类
+function getParentPayTypeList() {
+    $.ajax({
+        url: '{% url 'pay_type:get_p_pay_type_list' %}',
+        type: 'post',
+        data: {},
+        success: function (result) {
+            if (result.length > 0) {
+                let innerHtml = '<option selected value="0">请选择一级分类</option>';
+                $.each(result, function (index, val) {
+                    innerHtml += '<option value="' + val.id + '">' + val.name + '</option>';
+                });
+                $("#p_pay_type").html(innerHtml);
+            }
+        }
+    });
+}
+
+// 保存分类
+function save() {
+    let name = $("#name").val().trim(' ');
+    if (name.length == 0) {
+        $.alert("支出分类名称不能为空!", "提示", function () {});
+        return;
+    }
+    let p_id = $("#p_pay_type").val();
+    $.confirm("是否保存支出分类：" + name, "保存提示", function () {
+        $.ajax({
+            url: "{% url 'pay_type:save_pay_type' %}",
+            type: "post",
+            data: {
+                "name": name,
+                "p_id": p_id
+            },
+            success: function (result) {
+                if (result.code == 0) {
+                    $.confirm("保存成功，是否添加其他支出分类?", "操作确认", function () {
+                        // 添加其他分类则清空名称，如果保存的是一级分类则刷新一级分类列表
+                        $("#name").val("");
+                        if (p_id == 0) {
+                            getParentPayTypeList();
+                        }
+                    }, function () {
+                        // 不继续添加支出分类则返回到列表页面
+                        window.location.href = "{% url 'pay_type:to_list' %}";
+                    });
+                } else if (result.code == 2) {
+                    $("#name").val("");
+                    $.alert("名称重复，请重新输入!");
+                }
+            }
+        });
+    }, function () {});
+}
+
+// 返回到支出类型列表页面
+$(document).on("click", "#cancel", function () {
+    $.confirm("是否返回到列表页?", "是否返回", function () {
+        window.location.href = "{% url 'pay_type:to_list' %}";
+    }, function () {});
+});
+
+</script>
+
+{% endblock %}

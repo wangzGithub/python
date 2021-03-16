@@ -1,0 +1,32 @@
+{% extends 'wxbill/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>此处显示图标统计等信息</h1>
+<!-- 底部导航条 -->
+<div class="weui-tabbar tab-bottom">
+    <a class="weui-tabbar__item" href="{% url 'charts:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-67 f67 weui-tabbar__icon" style="color: #009788;"></i>
+        </span>
+        <p class="weui-tabbar__label">统计</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'bill:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-71 f71 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">账单</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'pay_type:to_list' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-33 f33 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">支出分类</p>
+    </a>
+</div>
+
+{% endblock %}
+
+{% block jsblock %}
+{% endblock %}

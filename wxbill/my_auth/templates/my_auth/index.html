@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="weui-form">
+<div class="page-hd">
     <div class="weui-form__text-area">
         <h2 class="weui-form__title">登录页面Title</h2>
         <div class="weui-form__desc">此页面更换为微信授权页面，获取用户的open_id并存放入数据库</div>
@@ -34,7 +34,7 @@
 {% block jsblock %}
 <script type="text/javascript">
 function to_test() {
-    window.location.replace("{% url 'my_auth:to_test' %}");
+    window.location.replace("{% url 'my_auth:page_login' %}");
 }
 </script>
 {% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'wxbill/base.html' %}
+
+{% block content %}
+<div class="page-hd">
+    <h1 class="page-hd-title">账单列表</h1>
+    <p class="page-hd-desc">默认显示当天记录账单信息</p>
+    {% if bill_list %}
+        123
+    {% else %}
+        <div class="weui-flex" style="height: 50px;text-align: center; line-height: 50px;">
+            <div class="weui-flex__item">
+                <h3>没有记录</h3>
+            </div>
+        </div>
+    {% endif %}
+    <a class="weui-btn weui-btn_default" href="{% url 'bill:to_add_bill' %}">添加账单</a>
+</div>
+
+<!-- 底部导航条 -->
+<div class="weui-tabbar tab-bottom">
+    <a class="weui-tabbar__item" href="{% url 'charts:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-67 f67 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">统计</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'bill:to_index' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-71 f71 weui-tabbar__icon" style="color: #009788;"></i>
+        </span>
+        <p class="weui-tabbar__label">账单</p>
+    </a>
+    <a class="weui-tabbar__item" href="{% url 'pay_type:to_list' %}">
+        <span style="display: inline-block; position: relative;">
+            <i class="icon icon-33 f33 weui-tabbar__icon"></i>
+        </span>
+        <p class="weui-tabbar__label">支出分类</p>
+    </a>
+</div>
+{% endblock %}
+
+{% block jsblock %}
+{% endblock %}
