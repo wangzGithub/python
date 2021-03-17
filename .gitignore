@@ -1,7 +1,6 @@
 *.idea
 wxbill/*.idea
 wxbill/**/*.__pycache__/**/*.pyc
-wxbill/wxbill/settings.py
 *.pyc
 wxbill/pay_type/migrations/0002_auto_20210316_2257.py
 wxbill/pay_type/migrations/0001_initial.py
