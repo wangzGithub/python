@@ -26,7 +26,7 @@
                 <label class="weui-label" style="padding-left: 15px;">一级分类</label>
             </div>
             <div class="weui-cell__bd">
-                <select id="p_pay_type" class="weui-select" style="margin-left: -15px;">
+                <select id="p_pay_type" class="weui-select" style="margin-left: -15px;" onchange="change_p_pay_type()">
                     {% if p_pay_type_list %}
                         <option selected value="0">请选择一级分类</option>
                         {% for p_pay_type in p_pay_type_list %}
@@ -38,13 +38,12 @@
                 </select>
             </div>
         </div>
-        <div class="weui-cell weui-cell_select" style="display: none;">
+        <div class="weui-cell weui-cell_select" id="child_pay_type" style="display: none;">
             <div class="weui-cell__hd">
                 <label class="weui-label" style="padding-left: 15px;">二级分类</label>
             </div>
             <div class="weui-cell__bd">
                 <select id="pay_type" class="weui-select" style="margin-left: -15px;">
-                    <option selected value="0">请选择二级分类</option>
                 </select>
             </div>
         </div>
@@ -66,7 +65,7 @@
         </div>
     </div>
     <div class="page-bd-15">
-        <a class="weui-btn weui-btn_primary">保存</a>
+        <a class="weui-btn weui-btn_primary" onclick="save()">保存</a>
         <a class="weui-btn weui-btn_warn" id="cancel">取消</a>
     </div>
 </div>
@@ -85,6 +84,7 @@ $().ready(function () {
     $('#bill_date').val(today);
 });
 
+// 时间选择控件
 $("#bill_date").datetimePicker({
     title: '账单日期',
     times:function(){return [];},
@@ -102,5 +102,41 @@ $(document).on("click", "#cancel", function () {
         window.location.href = "{% url 'bill:to_index' %}";
     }, function () {});
 });
+
+// 选择一级分类后根据选择的值显示二级分类
+function change_p_pay_type() {
+    let innerHtml = "";
+    let p_pay_type = $("#p_pay_type").val();
+    if (p_pay_type == 0) {
+        innerHtml += '<option selected value="0">请选择二级分类</option>';
+        $("#pay_type").html(innerHtml);
+        $("#child_pay_type").hide();
+        return;
+    }
+    $.ajax({
+        url: '{% url 'pay_type:get_child_pay_type_list' %}',
+        type: 'POST',
+        data: {
+            "p_id": p_pay_type
+        },
+        success: function (result) {
+            innerHtml += '<option selected value="0">请选择二级分类</option>';
+            if (result.length > 0) {
+                $.each(result, function (index, val) {
+                    innerHtml += '<option value="' + val.id + '">' + val.name + '</option>';
+                });
+                $("#child_pay_type").show();
+            } else {
+                $("#child_pay_type").hide();
+            }
+            $("#pay_type").html(innerHtml);
+        }
+    });
+}
+
+function save() {
+    let pay_type_id = $("#pay_type").val();
+    console.log(pay_type_id);
+}
 </script>
 {% endblock %}

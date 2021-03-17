@@ -3,7 +3,7 @@ from .models import PayType
 
 # 获取登录用户关联的一级支出分类
 def get_p_pay_type_list(request):
-    p_pay_type = PayType.objects.filter(user_id=request.user.id, p_pay_type=None, status=1)
+    p_pay_type = PayType.objects.filter(user_id=request.user.id, parent_pay_type=None, status=1)
     p_pay_type_list = []
     for pay_type in p_pay_type:
         item = {}
@@ -39,4 +39,16 @@ def save_pay_type(request):
             result.update({
                 'code': 1, 'msg': 'failed'
             })
+    return result
+
+
+# 获取一级分类下的所有二级分类
+def get_child_pay_type_list(request):
+    p_id = request.POST.get('p_id')
+    child_list = PayType.objects.filter(parent_pay_type_id=p_id, user_id=request.user.id, status=1)
+    result = []
+    if len(child_list) > 0:
+        for child in child_list:
+            item = {'id': child.id, 'name': child.name}
+            result.append(item)
     return result

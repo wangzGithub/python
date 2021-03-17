@@ -23,7 +23,7 @@ def to_index(request):
 @authenticated_user
 def to_add_bill(request):
     context = {}
-    p_pay_type_list = PayType.objects.filter(user_id=request.user.id, p_pay_type=None)
+    p_pay_type_list = PayType.objects.filter(user_id=request.user.id, parent_pay_type=None)
     context.update({
         'p_pay_type_list': p_pay_type_list
     })

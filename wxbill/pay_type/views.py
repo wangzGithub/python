@@ -25,7 +25,6 @@ def to_add_pay_type(request):
 @authenticated_user
 def get_p_pay_type_list(request):
     p_pay_type_list = utils.get_p_pay_type_list(request)
-    print(p_pay_type_list)
     return HttpResponse(json.dumps(p_pay_type_list), content_type='application/json')
 
 
@@ -33,4 +32,10 @@ def get_p_pay_type_list(request):
 @authenticated_user
 def save_pay_type(request):
     result = utils.save_pay_type(request)
+    return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+# 获取一级分类下的所有二级分类
+def get_child_pay_type_list(request):
+    result = utils.get_child_pay_type_list(request)
     return HttpResponse(json.dumps(result), content_type='application/json')

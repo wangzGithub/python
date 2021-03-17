@@ -11,7 +11,7 @@
     <ul class="collapse">
     {% for pay_type in pay_type_list %}
         <li>
-            <div class="weui-flex js-category">
+            <div class="weui-flex js-category open-popup" data-target="#child" onclick="get_child_pay_type({{ pay_type.id }})">
                 <div class="weui-flex__item">分类名称：{{ pay_type.name }}</div>
                 <i class="icon icon-83"></i>
             </div>
@@ -28,6 +28,23 @@
 </div>
 <div class="page-bd-15">
     <a class="weui-btn weui-btn_default" href="{% url 'pay_type:to_add_pay_type' %}">添加支出分类</a>
+</div>
+
+
+<div id="child" class="weui-popup__container popup-bottom" style="z-index: 550;">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup">关闭</a>
+                <h1 class="title">标题</h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-cells weui-cells_form" id="child_content">
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 底部导航条 -->
@@ -56,5 +73,29 @@
 
 {% block jsblock %}
 <script type="text/javascript">
+function get_child_pay_type(p_id) {
+    $.ajax({
+        url: '{% url 'pay_type:get_child_pay_type_list' %}',
+        type: 'post',
+        data: {
+            "p_id": p_id
+        },
+        success: function (result) {
+            let innerHtml = "";
+            if (result.length > 0) {
+                $.each(result, function (index, val) {
+                    innerHtml += '<div class="weui-cell">' +
+                        '<div class="weui-cell__hd">' +
+                        '<label class="weui-label">分类名称</label>' +
+                        '</div><div class="weui-cell__bd"><label class="weui-label">' + val.name + '</label></div></div>';
+                });
+            } else {
+                innerHtml += '<div class="weui-cell><label class="weui-label">暂无分类</label></div>'
+            }
+            innerHtml += '<div class="weui-cell"></div>';
+            $("#child_content").html(innerHtml);
+        }
+    });
+}
 </script>
 {% endblock %}
