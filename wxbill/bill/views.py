@@ -1,9 +1,9 @@
-from django.shortcuts import render
 from . import utils
 import time
 from .models import Bill
 from pay_type.models import PayType
 from my_auth.decorators import *
+import json
 
 
 # 账单首页 显示列表
@@ -28,3 +28,10 @@ def to_add_bill(request):
         'p_pay_type_list': p_pay_type_list
     })
     return render(request, 'bill/add_bill.html', context)
+
+
+# 保存账单
+@authenticated_user
+def save_bill(request):
+    result = utils.save_bill(request)
+    return HttpResponse(json.dumps(result), content_type='application/json')

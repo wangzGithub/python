@@ -60,7 +60,8 @@
                 <label class="weui-label">备注</label>
             </div>
             <div class="weui-cell__bd">
-                <textarea class="weui-textarea" placeholder="请输入不多于100字备注信息,可不填" rows="5"></textarea>
+                <textarea id="description" class="weui-textarea" placeholder="请输入不多于100字备注信息,可不填" rows="5">
+                </textarea>
             </div>
         </div>
     </div>
@@ -134,9 +135,53 @@ function change_p_pay_type() {
     });
 }
 
+// 保存方法
 function save() {
+    let name = $("#name").val().trim(' ');
+    if (name.length == 0) {
+        $.alert("请输入账单名称!");
+        return;
+    }
+    let bill_date = $("#bill_date").val();
+    if (bill_date.length == 0) {
+        $.alert("请选择账单日期!");
+        return;
+    }
     let pay_type_id = $("#pay_type").val();
-    console.log(pay_type_id);
+    if (pay_type_id == null || pay_type_id == 0) {
+        $.alert("请选择二级账单分类");
+        return;
+    }
+    let price = $("#price").val();
+    if (price.length == 0) {
+        $.alert("请输入账单金额!");
+        return;
+    }
+    let description = $("#description").val();
+    if (description.length > 100) {
+        $.alert("备注过长!");
+        return;
+    }
+    $.ajax({
+        url: "{% url 'bill:save_bill' %}",
+        type: "POST",
+        data: {
+            "name": name,
+            "bill_date": bill_date,
+            "pay_type_id": pay_type_id,
+            "price": price,
+            "description": description
+        },
+        success: function (result) {
+            if (result.code == 0) {
+                $.alert('保存成功', '提示', function () {
+                    window.location.href = "{% url 'bill:to_index' %}";
+                });
+            } else {
+                $.alert("保存错误,请重试!");
+            }
+        }
+    });
 }
 </script>
 {% endblock %}
