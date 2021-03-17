@@ -2,10 +2,32 @@
 
 {% block content %}
 <div class="page-hd">
-    <h1 class="page-hd-title">账单列表</h1>
+    <h1 class="page-hd-title">账单列表 {{ today }}</h1>
     <p class="page-hd-desc">默认显示当天记录账单信息</p>
+    <ul class="weui-payrec">
     {% if bill_list %}
-        123
+        {% for bill in bill_list %}
+        <div class="weui-pay-m">
+            <li class="weui-pay-order" id="{{ bill.id }}">
+                <dl class="weui-pay-line">
+                    <dd class="weui-pay-name">{{ bill.name }}</dd>
+                    <dt class="weui-pay-label">账单分类:</dt>
+                    <dd class="weui-pay-e">{{ bill.pay_type.name }}</dd>
+                </dl>
+                <dl class="weui-pay-line">
+                    <dt class="weui-pay-label">账单日期:</dt>
+                    <dd class="weui-pay-e">{{ bill.bill_date }}</dd>
+                </dl>
+                <dl class="weui-pay-line">
+                    <dt class="weui-pay-label">账单金额:</dt>
+                    <dd class="weui-pay-e">￥{{ bill.price }}</dd>
+                </dl>
+                <div class="weui-pay-area">
+                    <a href="javascript:;" class="weui-pay-v">删除账单</a>
+                </div>
+            </li>
+        </div>
+        {% endfor %}
     {% else %}
         <div class="weui-flex" style="height: 50px;text-align: center; line-height: 50px;">
             <div class="weui-flex__item">
@@ -13,6 +35,7 @@
             </div>
         </div>
     {% endif %}
+    </ul>
     <a class="weui-btn weui-btn_default" href="{% url 'bill:to_add_bill' %}">添加账单</a>
 </div>
 
