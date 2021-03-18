@@ -50,13 +50,13 @@ function getParentPayTypeList() {
         type: 'post',
         data: {},
         success: function (result) {
+            let innerHtml = '<option selected value="0">请选择一级分类</option>';
             if (result.length > 0) {
-                let innerHtml = '<option selected value="0">请选择一级分类</option>';
                 $.each(result, function (index, val) {
                     innerHtml += '<option value="' + val.id + '">' + val.name + '</option>';
                 });
-                $("#p_pay_type").html(innerHtml);
             }
+            $("#p_pay_type").html(innerHtml);
         }
     });
 }

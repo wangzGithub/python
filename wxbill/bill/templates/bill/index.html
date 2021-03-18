@@ -4,15 +4,14 @@
 <div class="page-hd">
     <h1 class="page-hd-title">账单列表 {{ today }}</h1>
     <p class="page-hd-desc">默认显示当天记录账单信息</p>
-    <ul class="weui-payrec">
-    {% if bill_list %}
+    <ul class="weui-payrec" id="list">
         {% for bill in bill_list %}
-        <div class="weui-pay-m">
-            <li class="weui-pay-order" id="{{ bill.id }}">
+        <div class="weui-pay-m" id="{{ bill.id }}">
+            <li class="weui-pay-order">
                 <dl class="weui-pay-line">
                     <dd class="weui-pay-name">{{ bill.name }}</dd>
                     <dt class="weui-pay-label">账单分类:</dt>
-                    <dd class="weui-pay-e">{{ bill.pay_type.name }}</dd>
+                    <dd class="weui-pay-e">{{ bill.pay_type.parent_pay_type.name }}--{{ bill.pay_type.name }}</dd>
                 </dl>
                 <dl class="weui-pay-line">
                     <dt class="weui-pay-label">账单日期:</dt>
@@ -23,20 +22,14 @@
                     <dd class="weui-pay-e">￥{{ bill.price }}</dd>
                 </dl>
                 <div class="weui-pay-area">
-                    <a href="javascript:;" class="weui-pay-v">删除账单</a>
+                    <a class="weui-btn weui-btn_mini bg-gray f-black" onclick="delete_bill({{ bill.id }})">删除账单</a>
                 </div>
             </li>
         </div>
         {% endfor %}
-    {% else %}
-        <div class="weui-flex" style="height: 50px;text-align: center; line-height: 50px;">
-            <div class="weui-flex__item">
-                <h3>没有记录</h3>
-            </div>
-        </div>
-    {% endif %}
     </ul>
-    <a class="weui-btn weui-btn_default" href="{% url 'bill:to_add_bill' %}">添加账单</a>
+    <div id="msg"></div>
+    <a class="weui-btn weui-btn_plain-primary" href="{% url 'bill:to_add_bill' %}">+添加账单</a>
 </div>
 
 <!-- 底部导航条 -->
@@ -63,4 +56,41 @@
 {% endblock %}
 
 {% block jsblock %}
+<script type="text/javascript">
+$(function () {
+    get_li_len()
+});
+// 判断列表是否为空 增加提示
+function get_li_len() {
+    let li_len = $("#list li").length;
+    console.log(li_len);
+    if (li_len == 0) {
+        $("#msg").css({"height": "50px", "text-align": "center", "line-height": "50px"});
+        $("#msg").html("<h3>没有记录</h3>");
+    }
+}
+// 删除账单
+function delete_bill(id) {
+    $.confirm("是否删除该记录？", "提示", function () {
+        $.ajax({
+            url: '{% url 'bill:delete_bill' %}',
+            type: 'POST',
+            data: {
+                "id": id
+            },
+            success: function (result) {
+                if (result.code == 2) {
+                    $.alert("记录不存在!");
+                } else if (result.code == 1) {
+                    $.alert("删除出错，请重试!");
+                } else {
+                    $.alert("删除成功!");
+                    $("#" + id).remove();
+                    get_li_len();
+                }
+            }
+        });
+    }, function () {});
+}
+</script>
 {% endblock %}

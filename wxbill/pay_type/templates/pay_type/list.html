@@ -27,7 +27,7 @@
 {% endif %}
 </div>
 <div class="page-bd-15">
-    <a class="weui-btn weui-btn_default" href="{% url 'pay_type:to_add_pay_type' %}">添加支出分类</a>
+    <a class="weui-btn weui-btn_plain-primary" href="{% url 'pay_type:to_add_pay_type' %}">+添加支出分类</a>
 </div>
 
 
@@ -37,7 +37,7 @@
         <div class="toolbar">
             <div class="toolbar-inner">
                 <a href="javascript:;" class="picker-button close-popup">关闭</a>
-                <h1 class="title">标题</h1>
+                <h1 class="title">下级分类</h1>
             </div>
         </div>
         <div class="modal-content">
@@ -87,7 +87,8 @@ function get_child_pay_type(p_id) {
                     innerHtml += '<div class="weui-cell">' +
                         '<div class="weui-cell__hd">' +
                         '<label class="weui-label">分类名称</label>' +
-                        '</div><div class="weui-cell__bd"><label class="weui-label">' + val.name + '</label></div></div>';
+                        '</div><div class="weui-cell__bd"><label class="weui-label">' +
+                        (index + 1) + '、' + val.name + '</label></div></div>';
                 });
             } else {
                 innerHtml += '<div class="weui-cell><label class="weui-label">暂无分类</label></div>'

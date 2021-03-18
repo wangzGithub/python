@@ -3,7 +3,18 @@
 
 {% block content %}
 
-<h1>此处显示图标统计等信息</h1>
+<div class="page-hd">
+    <h1 class="page-hd-title">欢迎：{{ username }}</h1>
+</div>
+<div class="page-bd-15">
+<h3>title1</h3>
+<div class="img-box">
+    <canvas id="myChart" width="400" height="260"></canvas>
+</div>
+<div class="img-box">
+    <canvas id="mountNode"></canvas>
+</div>
+</div>
 <!-- 底部导航条 -->
 <div class="weui-tabbar tab-bottom">
     <a class="weui-tabbar__item" href="{% url 'charts:to_index' %}">
@@ -29,4 +40,57 @@
 {% endblock %}
 
 {% block jsblock %}
+<script type="text/javascript">
+$(function () {
+    myCharts();
+    pieChart();
+});
+
+function myCharts() {
+    let data = [];
+    $.ajax({
+        url: '{% url 'charts:get_today_bar_chart' %}',
+        type: 'POST',
+        success: function (result) {
+            data = result;
+            const chart = new F2.Chart({
+                id: 'myChart',
+                pixelRatio: window.devicePixelRatio
+            });
+            if (data.length > 0) {
+                chart.source(data);
+                chart.interval().position('name*price').color('name');
+                chart.render();
+            }
+        }
+    });
+
+}
+
+function pieChart() {
+    $.ajax({
+        url: '{% url 'charts:get_today_pie_chart' %}',
+        type: 'POST',
+        success: function (result) {
+            console.log(result);
+
+  var chart = new F2.Chart({
+    id: 'mountNode',
+    pixelRatio: window.devicePixelRatio
+  });
+  chart.source(result);
+  chart.coord('polar');
+  chart.legend({
+    position: 'right'
+  });
+  chart.axis(false);
+  chart.interval().position('name*price').color('name').style({
+    lineWidth: 1,
+    stroke: '#fff'
+  });
+  chart.render();
+        }
+    });
+}
+</script>
 {% endblock %}

@@ -21,3 +21,28 @@ def save_bill(request):
     except:
         result = {'code': 1, 'msg': 'save failed'}
     return result
+
+
+# 删除账单
+def delete_bill(request):
+    bill_id = request.POST.get('id')
+    result = {}
+    print(bill_id)
+    bill_list = Bill.objects.filter(id=bill_id)
+    print(bill_list)
+    if len(bill_list) > 0:
+        bill = bill_list[0]
+        try:
+            bill.delete()
+            result.update({
+                'code': 0, 'msg': 'success'
+            })
+        except:
+            result.update({
+                'code': 1, 'msg': 'error'
+            })
+    else:
+        result.update({
+            'code': 2, 'msg': 'Bill not found'
+        })
+    return result

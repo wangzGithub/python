@@ -35,3 +35,10 @@ def to_add_bill(request):
 def save_bill(request):
     result = utils.save_bill(request)
     return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+# 删除账单
+@authenticated_user
+def delete_bill(request):
+    result = utils.delete_bill(request)
+    return HttpResponse(json.dumps(result), content_type='application/json')
