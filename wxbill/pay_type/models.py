@@ -1,5 +1,5 @@
 from django.db import models
-from my_auth.models import User
+from django.contrib.auth.models import User
 
 
 # 账单分类表

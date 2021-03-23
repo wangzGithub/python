@@ -10,7 +10,7 @@ from django.db.models import Sum
 def to_index(request):
     content = {}
     content.update({
-        'username': request.user.wx.nickname
+        'username': request.user.username
     })
     return render(request, 'charts/index.html', context=content)
 

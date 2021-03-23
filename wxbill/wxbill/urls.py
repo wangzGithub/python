@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,4 +23,8 @@ urlpatterns = [
     path('pay_type/', include('pay_type.urls')),
     path('charts/', include('charts.urls')),
     path('bill/', include('bill.urls')),
+]
+
+urlpatterns = [
+    url('^wxbill/', include(urlpatterns))
 ]

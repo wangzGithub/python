@@ -1,6 +1,6 @@
 from django.db import models
 from pay_type.models import PayType
-from my_auth.models import User
+from django.contrib.auth.models import User
 
 
 # 账单表

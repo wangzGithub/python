@@ -1,0 +1,6 @@
+asgiref==3.3.1
+django==3.0.5
+mysql-connector-python==8.0.22
+mysqlclient==2.0.3
+pytz==2020.4
+sqlparse==0.4.1

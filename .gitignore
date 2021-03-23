@@ -8,3 +8,4 @@ wxbill/my_auth/migrations/0001_initial.py
 wxbill/bill/migrations/0001_initial.py
 wxbill/bill/migrations/0002_auto_20210317_2231.py
 wxbill/bill/migrations/0003_auto_20210317_2334.py
+wxbill/wxbill/settings.py

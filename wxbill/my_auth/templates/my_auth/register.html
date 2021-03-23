@@ -4,7 +4,7 @@
 
 <div class="page-bd-15">
     <div class="weui-form__text-area">
-        <h2 class="weui-form__title">登录页面</h2>
+        <h2 class="weui-form__title">注册页面</h2>
     </div>
     <div class="weui-form__control-area">
         <div class="weui-cells__group weui-cells__group_form">
@@ -24,14 +24,15 @@
                         <label class="weui-label">password</label>
                     </div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" name="password" id="password" type="password">
+                        <input class="weui-input" name="password1" id="password1" type="password" placeholder="填写密码">
                     </div>
                 </div>
                 <div class="weui-cell">
-                    <div class="weui-cell__hd"></div>
-                    <div class="weui-cell__bd"></div>
-                    <div class="weui-cell__ft">
-                        <a class="weui-btn_mini weui-btn_default" onclick="to_register()">register</a>
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">password</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" name="password2" id="password2" type="password" placeholder="重复密码">
                     </div>
                 </div>
             </div>
@@ -45,26 +46,36 @@
 {% block jsblock %}
 <script type="text/javascript">
 function login() {
-    let username = $("#username").val();
-    let password = $("#password").val();
+    let username = $("#username").val().trim(' ');
+    let password1 = $("#password1").val().trim(' ');
+    let password2 = $("#password2").val().trim(' ');
+    if (username.length == 0) {
+        $.alert("用户名不能为空!", "提示", function () {});
+        return;
+    } if (password1.length == 0) {
+        $.alert("密码不能为空!", "提示", function () {});
+        return;
+    }
+    if (password1 != password2) {
+        $.alert("两次密码不一致!", "提示", function () {});
+        return;
+    }
     $.ajax({
-        url: '{% url 'my_auth:login_real' %}',
+        url: '{% url 'my_auth:register' %}',
         type: 'POST',
         data: {
             "username": username,
-            "password": password
+            "password": password1
         },
         success: function (result) {
             if (result.code == 0) {
-                window.location.href="{% url 'charts:to_index' %}";
+                $.alert("创建成功!", "提示", function () {
+                    window.location.href="{% url 'my_auth:to_index' %}";
+                });
+            } else {
+                $.alert("用户已存在!", "提示", function () {});
             }
         }
-    });
-}
-
-function to_register() {
-    $.confirm("是否创建用户?", "提示", function () {
-        window.location.href="{% url 'my_auth:to_register' %}";
     });
 }
 </script>
